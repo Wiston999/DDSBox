@@ -1,0 +1,68 @@
+const long MAX_NAME = 				256;
+const long MAX_PARAMETER = 			512;
+const long MAX_PAYLOAD_SIZE = 		1024*1024;
+typedef string<MAX_NAME> 			nameType;
+typedef string<MAX_PARAMETER> 		parameterType;
+
+struct FileInfo {
+	nameType				userUuid;
+	nameType				owner;
+	nameType				fileName;
+	long					timestamp;
+	long					size;
+	nameType				hash;
+	boolean                 isDir;
+	short					change;
+	sequence<octet, MAX_PAYLOAD_SIZE>	content;
+};
+
+struct FileSegment {
+	nameType				userUuid;
+	nameType				hash;
+	nameType				fileName; //@key
+	long					idSegment; //@key
+	sequence<octet, MAX_PAYLOAD_SIZE>	segmentContent;
+};
+
+struct Command {
+	nameType				userUuid;
+	short					idCommand;
+	parameterType			parameters;
+};
+
+struct User{
+    nameType                uuid;
+	nameType				userName;
+	nameType				realName;
+	nameType				email;
+	parameterType			publicRSA;
+	short					online;
+};
+
+struct FolderInfo{
+    nameType                userUuid;
+    nameType                destUser;
+	nameType				owner;
+	nameType                uuid;
+	nameType				folderName;
+	short                   type;
+	short					permission;
+	sequence<octet, MAX_PAYLOAD_SIZE>	encryptedKey;
+	sequence<octet, MAX_PAYLOAD_SIZE>	content;
+};
+
+struct GlobalMessage {
+	nameType				userName;
+	nameType				text;
+	long					timestamp;
+};
+
+struct UserMessage {
+	nameType				destUser;
+	nameType				userName;
+	nameType				text;
+	long					timestamp;
+	nameType				reciever;
+	short					idCommand;
+	parameterType			parameters;
+};

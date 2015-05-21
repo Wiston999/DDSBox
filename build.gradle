@@ -1,0 +1,47 @@
+apply plugin: 'java'
+
+def NDDSHOME = System.getenv('NDDSHOME')
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+libsDirName = '../bin'
+
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dirs NDDSHOME+'/class/'
+        //dirs 'libs'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    compile name: 'nddsjava',
+                  'com.miglayout:miglayout-swing:4.2',
+                  'com.github.insubstantial:substance:7.3',
+                  'org.xerial:sqlite-jdbc:3.8.7',
+                  'com.sun.xml.security:xml-security-impl:1.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/res'
+        }
+    }
+}
+
+jar {
+    baseName = project.name
+    manifest {
+        attributes 'Implementation-Version': version,
+                    'Main-Class': 'es.ugr.ddsbox.DDSBox'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
